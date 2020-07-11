@@ -1,7 +1,11 @@
+const { User } = require('../../database/schemas');
+
 const allUsers = [];
 
 const userResolvers = {
-  User: {},
+  User: {
+    friends: async () => { }
+  },
   Query: {
     users: async () => {
       console.log("lol");
@@ -30,13 +34,27 @@ const userResolvers = {
     },
   },
   Mutation: {
-    createUser: async (_, { id, name, email, password, phone }) => {
-      slug = name.toLowerCase();
-      const user = { id, name, slug, email, password, phone };
-      allUsers.push(user);
-      console.log(allUsers);
-      return allUsers;
+    createUser: async (_, { name, email, password, phone, gender, address }) => {
+      try {
+        let user = {
+          name,
+          slug: name.toLowerCase(),
+          email,
+          password,
+          phone,
+          gender,
+          address
+        };
+        user = await User.create(user);
+        return user
+      } catch (err) {
+        throw err;
+      }
     },
+    // updateUser: async (_, { id, name, email, phone, gender, address }) => {
+    //   slug = name.toLowerCase();
+    //   const user = {  }
+    // }
   },
 };
 

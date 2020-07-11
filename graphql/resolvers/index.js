@@ -1,4 +1,11 @@
-const userResolvers = require("./user");
-const { merge } = require("lodash");
+const { merge } = require('lodash');
 
-module.exports = merge(userResolvers);
+const commentResolvers = require('./comment');
+const ideaResolvers = require('./idea')
+const userResolvers = require('./user');
+
+module.exports = merge(
+    commentResolvers,
+    ideaResolvers,
+    userResolvers
+);

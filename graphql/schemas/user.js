@@ -7,13 +7,14 @@ const userSchema = gql`
     slug: String!
     email: String!
     password: String!
-    gender: String
     phone: String!
+    gender: String
     address: String
+    friends: [User]!
   }
   type Query {
-    users: [User]
-    user(id: ID!): User
+    users: [User]!
+    user(id: ID!): User!
   }
   type Mutation {
     createUser(
@@ -22,7 +23,22 @@ const userSchema = gql`
       password: String!
       confirmPassword: String!
       phone: String!
-    ): [User]
+      gender: String
+      address: String
+    ): User
+    updateUser(
+      id: ID!
+      name: String!
+      email: String!
+      password: String!
+      confirmPassword: String!
+      phone: String!
+      gender: String
+      address: String
+    ): User
+    deleteUser(
+      id: ID!
+    ): User
   }
 `;
 
