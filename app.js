@@ -15,12 +15,6 @@ const MONGO_URI = process.env.MONGO_URI;
 
 const app = express();
 
-//remove deprecation warning
-mongoose.set("useNewUrlParser", true);
-mongoose.set("useFindAndModify", false);
-mongoose.set("useCreateIndex", true);
-mongoose.set("useUnifiedTopology", true);
-
 // const { Idea } = require('./database/schemas')
 
 const server = new ApolloServer({
@@ -28,20 +22,23 @@ const server = new ApolloServer({
   resolvers: graphqlResolvers,
 });
 
-server.applyMiddleware({ app, path: '/api/graphql' });
-
-const httpServer = http.createServer(app);
-
-// server.installSubscriptionHandlers(httpServer);
-
-app.get('/', () => {
-  console.log('lol');
+server.start().then(() => {
+  server.applyMiddleware({ app, path: '/api/graphql' });
+  const httpServer = http.createServer(app);
+  // server.installSubscriptionHandlers(httpServer);
+  
+  app.get('/', () => {
+    console.log('lol');
+  });
+  
+  mongoose
+    .connect(MONGO_URI)
+    .then(() => {
+      httpServer.listen({ port: PORT }, () => {
+        console.log(`Database connected and Apollo Graphql Server on http://localhost:${PORT}/api/graphql`);
+      });
+    })
 });
 
-mongoose
-  .connect(MONGO_URI)
-  .then(() => {
-    httpServer.listen({ port: PORT }, () => {
-      console.log(`Database connected and Apollo Graphql Server on http://localhost:${PORT}/api/graphql`);
-    });
-  })
+
+
