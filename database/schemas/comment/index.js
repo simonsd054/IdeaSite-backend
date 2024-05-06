@@ -1,5 +1,5 @@
-const Comment = require('./comment');
-const VoteComment = require('./vote');
+const Comment = require("./comment")
+const VoteComment = require("./vote")
 
 module.exports = {
   Comment,

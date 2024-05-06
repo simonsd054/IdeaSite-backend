@@ -1,10 +1,9 @@
-const { gql } = require("apollo-server-express");
+const { gql } = require("apollo-server-express")
 
 const userSchema = gql`
   type User {
     id: ID!
     name: String!
-    slug: String!
     email: String!
     password: String!
     phone: String!
@@ -17,7 +16,7 @@ const userSchema = gql`
     user(id: ID!): User!
   }
   type Mutation {
-    createUser(
+    register(
       name: String!
       email: String!
       password: String!
@@ -36,10 +35,8 @@ const userSchema = gql`
       gender: String
       address: String
     ): User
-    deleteUser(
-      id: ID!
-    ): User
+    deleteUser(id: ID!): User
   }
-`;
+`
 
-module.exports = userSchema;
+module.exports = userSchema

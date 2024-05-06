@@ -1,5 +1,5 @@
-const Idea = require('./idea');
-const Vote = require('./vote');
+const Idea = require("./idea")
+const Vote = require("./vote")
 
 module.exports = {
   Idea,

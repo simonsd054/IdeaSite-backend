@@ -1,62 +1,50 @@
-const { User } = require('../../database/schemas');
+const bcrypt = require("bcrypt")
+const { CustomError } = require("../../utils")
 
-const allUsers = [];
+const { User } = require("../../database/schemas")
 
 const userResolvers = {
   User: {
-    friends: async () => { }
+    friends: async () => {},
   },
   Query: {
     users: async () => {
-      const users  = await User.find();
-      // const users = [
-      //   {
-      //     id: 1,
-      //     name: "Simon",
-      //     slug: "simon",
-      //     email: "simonsd054@gmail.com",
-      //     password: "lol",
-      //     phone: "9842485355",
-      //   },
-      // ];
-      return users;
+      const users = await User.find()
+      return users
     },
     user: async (_, { id }) => {
-      const user = await User.findById(id);
-      // const user = {
-      //   id: 1,
-      //   name: "Simon",
-      //   slug: "simon",
-      //   email: "simonsd054@gmail.com",
-      //   password: "lol",
-      //   phone: "9842485355",
-      // };
-      return user;
+      const user = await User.findById(id)
+      return user
     },
   },
   Mutation: {
-    createUser: async (_, { name, email, password, phone, gender, address }) => {
-      try {
-        let user = {
-          name,
-          slug: name.toLowerCase(),
-          email,
-          password,
-          phone,
-          gender,
-          address
-        };
-        user = await User.create(user);
-        return user
-      } catch (err) {
-        throw err;
+    register: async (
+      _,
+      { name, email, password, confirmPassword, phone, gender, address }
+    ) => {
+      if (password !== confirmPassword) {
+        throw new CustomError("Password and Confirm Password do not match")
       }
+      let user = {
+        name,
+        email,
+        phone,
+        gender,
+        address,
+      }
+      const hashedPassword = await bcrypt.hash(password, 10)
+      user.password = hashedPassword
+      try {
+        user = await User.create(user)
+      } catch (err) {
+        throw new CustomError(err.message)
+      }
+      return user
     },
     // updateUser: async (_, { id, name, email, phone, gender, address }) => {
-    //   slug = name.toLowerCase();
     //   const user = {  }
     // }
   },
-};
+}
 
-module.exports = userResolvers;
+module.exports = userResolvers

@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 
 async function checkUnique(model, field, data) {
-  const itemCount = await mongoose.model(model).count({ [field]: data });
-  return itemCount > 0 ? false : true;
+  const item = await mongoose.model(model).findOne({ [field]: data })
+  return item ? false : true
 }
 
-module.exports = checkUnique;
+module.exports = checkUnique

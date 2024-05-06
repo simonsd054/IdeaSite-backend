@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server-express");
+const { gql } = require("apollo-server-express")
 
 const ideaSchema = gql`
   type Idea {
@@ -20,19 +20,17 @@ const ideaSchema = gql`
       body: String!
       co_authors: [ID]!
       suggested_to: [ID]!
-    	derived_from: [ID]!
+      derived_from: [ID]!
     ): Idea!
     updateIdea(
       id: ID!
       body: String!
       co_authors: [ID]!
       suggested_to: [ID]!
-    	derived_from: [ID]!
+      derived_from: [ID]!
     ): Idea!
-    deleteIdea(
-      id: ID!
-    ): Idea!
+    deleteIdea(id: ID!): Idea!
   }
-`;
+`
 
-module.exports = ideaSchema;
+module.exports = ideaSchema

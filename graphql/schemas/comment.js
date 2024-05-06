@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server-express");
+const { gql } = require("apollo-server-express")
 
 const commentSchema = gql`
   type Comment {
@@ -17,19 +17,10 @@ const commentSchema = gql`
     comment(id: ID!): Comment!
   }
   extend type Mutation {
-    createComment(
-      body: String!
-      idea_id: ID!
-      comment_id: ID!
-    ): Comment!
-    updateComment(
-      id: ID!
-      body: String!
-    ): Comment!
-    deleteComment(
-      id: ID!
-    ): Comment!
+    createComment(body: String!, idea_id: ID!, comment_id: ID!): Comment!
+    updateComment(id: ID!, body: String!): Comment!
+    deleteComment(id: ID!): Comment!
   }
-`;
+`
 
-module.exports = commentSchema;
+module.exports = commentSchema

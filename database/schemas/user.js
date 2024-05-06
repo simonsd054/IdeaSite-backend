@@ -1,48 +1,44 @@
-const mongoose = require("mongoose");
-const { checkUnique } = require("../utils");
+const mongoose = require("mongoose")
+const { CustomError } = require("../../utils")
+
+const { checkUnique } = require("../utils")
 
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true
-    },
-    slug: {
-      type: String,
-      required: true
+      required: true,
     },
     email: {
       type: String,
       required: true,
       validate: {
         validator: async function (v) {
-          try {
-            return await checkUnique("User", "email", v);
-          } catch (err) {
-            throw new Error("Some error occurred");
-          }
+          return await checkUnique("User", "email", v)
         },
-        message: (props) => `${props.value} already exists`
-      }
+        message: (props) => `${props.value} already exists`,
+      },
     },
     email_verified_at: Date,
     password: {
       type: String,
-      required: true
+      required: true,
     },
     address: String,
     gender: String,
     phone: {
       type: Number,
-      required: true
+      required: true,
     },
-    fiends_ids: [{
-      type: mongoose.Schema.Types.ObjectId
-    }]
+    fiends_ids: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+      },
+    ],
   },
   {
-    timestamps: true
+    timestamps: true,
   }
-);
+)
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("User", userSchema)

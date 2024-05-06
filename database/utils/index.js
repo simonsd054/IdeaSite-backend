@@ -1,5 +1,5 @@
-const checkUnique = require("./checkUnique");
+const checkUnique = require("./checkUnique")
 
 module.exports = {
   checkUnique,
-};
+}
