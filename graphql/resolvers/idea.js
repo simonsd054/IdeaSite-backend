@@ -1,4 +1,5 @@
 const { Comment, Idea, Vote, User } = require("../../database/schemas")
+const { verifyToken } = require("../../utils")
 
 const ideaResolvers = {
   Idea: {
@@ -137,11 +138,12 @@ const ideaResolvers = {
     },
   },
   Mutation: {
-    createIdea: async (_, { body, co_authors, suggested_to, derived_from }) => {
+    createIdea: async (_, { body, co_authors, suggested_to, derived_from }, context) => {
       try {
+        const user = await verifyToken(context.token)
         let idea = {
           body,
-          user_id: "5f004f6c8822159684f4181b",
+          user_id: user._id,
           co_authors,
           suggested_to,
           derived_from,

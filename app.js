@@ -7,6 +7,7 @@ require("dotenv").config()
 
 const graphqlResolvers = require("./graphql/resolvers")
 const graphqlSchemas = require("./graphql/schemas")
+const { CustomError } = require("./utils")
 
 const PORT = process.env.PORT
 const MONGO_URI = process.env.MONGO_URI
@@ -33,6 +34,13 @@ const server = new ApolloServer({
 
     // Use error key of this object in the frontend
     return error
+  },
+  context: ({ req, res }) => {
+    // Get the user token from the headers.
+    let token = req.headers.authorization || ""
+
+    token = token?.split(" ")?.[1] // token
+    return { token }
   },
 })
 

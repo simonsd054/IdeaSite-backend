@@ -1,5 +1,4 @@
 const mongoose = require("mongoose")
-const { CustomError } = require("../../utils")
 
 const { checkUnique } = require("../utils")
 
