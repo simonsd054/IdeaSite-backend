@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt")
-const { CustomError } = require("../../utils")
+const { isEmpty } = require("lodash")
 
+const { CustomError, createToken } = require("../../utils")
 const { User } = require("../../database/schemas")
 
 const userResolvers = {
@@ -40,6 +41,18 @@ const userResolvers = {
         throw new CustomError(err.message)
       }
       return user
+    },
+    login: async (_, { email, password }) => {
+      const user = await User.findOne({ email })
+      if (isEmpty(user)) {
+        throw new CustomError("Cannot find the user with that email")
+      }
+      const isPasswordCorrect = await bcrypt.compare(password, user.password)
+      if (!isPasswordCorrect) {
+        throw new CustomError("Incorrect password")
+      }
+      const token = createToken(user._id)
+      return token
     },
     // updateUser: async (_, { id, name, email, phone, gender, address }) => {
     //   const user = {  }

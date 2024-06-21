@@ -25,6 +25,10 @@ const userSchema = gql`
       gender: String
       address: String
     ): User
+    login(
+      email: String!
+      password: String!
+    ): String
     updateUser(
       id: ID!
       name: String!
