@@ -3,6 +3,7 @@ const { gql } = require("apollo-server-express")
 const ideaSchema = gql`
   type Idea {
     id: ID!
+    title: String!
     body: String!
     user: User!
     co_authors: [User]!
@@ -10,6 +11,8 @@ const ideaSchema = gql`
     derived_from: [Idea]!
     comments: [Comment]!
     votes: [Vote]!
+    createdAt: String
+    updatedAt: String
   }
   extend type Query {
     ideas: [Idea]!
@@ -17,6 +20,7 @@ const ideaSchema = gql`
   }
   extend type Mutation {
     createIdea(
+      title: String!
       body: String!
       co_authors: [ID]!
       suggested_to: [ID]!
@@ -24,6 +28,7 @@ const ideaSchema = gql`
     ): Idea!
     updateIdea(
       id: ID!
+      title: String!
       body: String!
       co_authors: [ID]!
       suggested_to: [ID]!

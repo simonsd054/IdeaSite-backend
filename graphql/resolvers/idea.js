@@ -1,5 +1,5 @@
 const { Comment, Idea, Vote, User } = require("../../database/schemas")
-const { verifyToken } = require("../../utils")
+const { verifyToken, CustomError } = require("../../utils")
 
 const ideaResolvers = {
   Idea: {
@@ -34,7 +34,7 @@ const ideaResolvers = {
         throw err
       }
     },
-    co_authors: async (parent) => {
+    derived_from: async (parent) => {
       try {
         const derived_from = await Idea.find({
           _id: {
@@ -49,7 +49,7 @@ const ideaResolvers = {
     comments: async (parent) => {
       try {
         const comments = await Comment.find({
-          idea_id: parent,
+          idea_id: parent._id,
         })
         return comments
       } catch (err) {
@@ -98,13 +98,7 @@ const ideaResolvers = {
       try {
         const idea = await Idea.findById(id)
         if (!idea) {
-          const error = new Error(
-            JSON.stringify({
-              message: "Idea not found",
-              status: 402,
-            })
-          )
-          throw error
+          throw new CustomError("Idea not found")
         }
         return idea
       } catch (err) {
@@ -123,13 +117,7 @@ const ideaResolvers = {
       try {
         const vote = await Vote.findById(id)
         if (!vote) {
-          const error = new Error(
-            JSON.stringify({
-              message: "Vote not found",
-              status: 402,
-            })
-          )
-          throw error
+          throw new CustomError("Vote not found")
         }
         return vote
       } catch (err) {
@@ -138,10 +126,15 @@ const ideaResolvers = {
     },
   },
   Mutation: {
-    createIdea: async (_, { body, co_authors, suggested_to, derived_from }, context) => {
+    createIdea: async (
+      _,
+      { title, body, co_authors, suggested_to, derived_from },
+      context
+    ) => {
       try {
         const user = await verifyToken(context.token)
         let idea = {
+          title,
           body,
           user_id: user._id,
           co_authors,
