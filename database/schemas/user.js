@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    // TODO: change friends_ids to junction table
     fiends_ids: [
       {
         type: mongoose.Schema.Types.ObjectId,
