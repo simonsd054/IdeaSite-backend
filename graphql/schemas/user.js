@@ -11,6 +11,10 @@ const userSchema = gql`
     address: String
     friends: [User]!
   }
+  type Token {
+    token: String!
+    user: User!
+  }
   type Query {
     users: [User]!
     user(id: ID!): User!
@@ -24,11 +28,11 @@ const userSchema = gql`
       phone: String!
       gender: String
       address: String
-    ): User
+    ): Token
     login(
       email: String!
       password: String!
-    ): String
+    ): Token
     updateUser(
       id: ID!
       name: String!

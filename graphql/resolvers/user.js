@@ -38,9 +38,13 @@ const userResolvers = {
       try {
         user = await User.create(user)
       } catch (err) {
-        throw new CustomError(err.message)
+        if (err.message.includes("already exists")) {
+          throw new CustomError(err.message)
+        }
+        throw new CustomError("Cannot register the user. Contact admin.")
       }
-      return user
+      const token = createToken(user._id)
+      return { token, user }
     },
     login: async (_, { email, password }) => {
       const user = await User.findOne({ email })
@@ -52,7 +56,7 @@ const userResolvers = {
         throw new CustomError("Incorrect password")
       }
       const token = createToken(user._id)
-      return token
+      return { token, user }
     },
     // updateUser: async (_, { id, name, email, phone, gender, address }) => {
     //   const user = {  }
