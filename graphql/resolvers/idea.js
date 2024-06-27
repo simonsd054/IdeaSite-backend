@@ -158,6 +158,30 @@ const ideaResolvers = {
         throw err
       }
     },
+    updateIdea: async (
+      _,
+      { id, title, body, co_authors, suggested_to, derived_from },
+      context
+    ) => {
+      try {
+        const user = await verifyToken(context.token)
+        let idea = {
+          title,
+          body,
+          user_id: user._id,
+          co_authors,
+          suggested_to,
+          derived_from,
+        }
+        const updatedIdea = await Idea.findByIdAndUpdate(id, idea)
+        if (!updatedIdea) {
+          throw new CustomError("Idea couldn't be updated.")
+        }
+        return updatedIdea
+      } catch (err) {
+        throw err
+      }
+    },
     deleteIdea: async (_, { id }, context) => {
       try {
         const user = await verifyToken(context.token)
@@ -166,7 +190,7 @@ const ideaResolvers = {
           user_id: user._id,
         })
         if (!idea) {
-          throw new CustomError("Idea couldn't be deleted. Contact Admin.")
+          throw new CustomError("Idea couldn't be deleted.")
         }
         return idea
       } catch (err) {
