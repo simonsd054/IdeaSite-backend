@@ -158,6 +158,21 @@ const ideaResolvers = {
         throw err
       }
     },
+    deleteIdea: async (_, { id }, context) => {
+      try {
+        const user = await verifyToken(context.token)
+        const idea = await Idea.findOneAndDelete({
+          _id: id,
+          user_id: user._id,
+        })
+        if (!idea) {
+          throw new CustomError("Idea couldn't be deleted. Contact Admin.")
+        }
+        return idea
+      } catch (err) {
+        throw err
+      }
+    },
     createVote: async (_, { idea_id, vote }, context) => {
       try {
         const user = await verifyToken(context.token)
