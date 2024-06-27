@@ -147,10 +147,11 @@ const ideaResolvers = {
         throw err
       }
     },
-    createVote: async (_, { idea_id, vote }) => {
+    createVote: async (_, { idea_id, vote }, context) => {
       try {
+        const user = await verifyToken(context.token)
         let voteCreated = {
-          user_id: "5f004f6c8822159684f4181b",
+          user_id: user._id,
           idea_id,
           vote,
         }
