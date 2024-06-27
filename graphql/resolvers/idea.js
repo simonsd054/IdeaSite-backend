@@ -105,6 +105,17 @@ const ideaResolvers = {
         throw err
       }
     },
+    myIdeas: async (_, __, context) => {
+      try {
+        const user = await verifyToken(context.token)
+        const ideas = await Idea.find({
+          user_id: user._id,
+        })
+        return ideas
+      } catch (err) {
+        throw err
+      }
+    },
     votes: async () => {
       try {
         const votes = await Vote.find()

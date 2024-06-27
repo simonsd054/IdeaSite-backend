@@ -17,6 +17,7 @@ const ideaSchema = gql`
   extend type Query {
     ideas: [Idea]!
     idea(id: ID!): Idea!
+    myIdeas: [Idea]!
   }
   extend type Mutation {
     createIdea(
