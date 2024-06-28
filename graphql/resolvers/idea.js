@@ -88,7 +88,7 @@ const ideaResolvers = {
   Query: {
     ideas: async () => {
       try {
-        const ideas = await Idea.find()
+        const ideas = await Idea.find().sort({ updatedAt: -1 })
         return ideas
       } catch (err) {
         throw err
@@ -110,7 +110,7 @@ const ideaResolvers = {
         const user = await verifyToken(context.token)
         const ideas = await Idea.find({
           user_id: user._id,
-        })
+        }).sort({ updatedAt: -1 })
         return ideas
       } catch (err) {
         throw err
